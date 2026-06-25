@@ -50,7 +50,7 @@
 
 ![个人中心](https://pic.otaku.ren/20241227/AQADVsIxG7OzcFd-.jpg "个人中心")
 
-## 新功能：
+## 新功能
 ![角色管理](image/role_management.png "角色管理 - 新增功能")
 
 ## 文档
