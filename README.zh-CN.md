@@ -50,6 +50,8 @@
 
 ![个人中心](https://pic.otaku.ren/20241227/AQADVsIxG7OzcFd-.jpg "个人中心")
 
+![角色管理](image/role_management.png "角色管理 - 新增功能")
+
 ## 文档
 **完整文档**: [https://docs.moemail.app](https://docs.moemail.app)
 
