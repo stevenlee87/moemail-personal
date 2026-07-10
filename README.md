@@ -53,6 +53,15 @@
 ## Add new function
 ![Role Management](image/role_management2.png "Role Management - New Feature")
 
+### Delete User
+The **Emperor** (site owner) can permanently delete users directly from the Role Management panel.
+
+- 🗑️ Click the trash button on any **non-Emperor** user row, then confirm in the dialog.
+- **Safety guards**: Emperor-only (HTTP 403 otherwise); cannot delete yourself; cannot delete an Emperor.
+- **Cascade cleanup**: removes the user's API keys, accounts, webhooks, mailboxes, and all their messages.
+- Auto-steps back to the previous page when deleting the last user on a page.
+- Available in all 5 languages (en, zh-CN, zh-TW, ja, ko).
+
 ## Documentation
 **Full Documentation**: [https://docs.moemail.app](https://docs.moemail.app)
 
