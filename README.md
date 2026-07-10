@@ -51,7 +51,7 @@
 ![Profile](https://pic.otaku.ren/20241227/AQADVsIxG7OzcFd-.jpg "Profile")
 
 ## Add new function
-![Role Management](image/role_management.png "Role Management - New Feature")
+![Role Management](image/role_management2.png "Role Management - New Feature")
 
 ## Documentation
 **Full Documentation**: [https://docs.moemail.app](https://docs.moemail.app)
