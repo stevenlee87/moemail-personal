@@ -14,10 +14,25 @@ interface SendEmailRequest {
   content: string
 }
 
+function escapeHtml(text: string) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
+
+// 输入框是纯文本 textarea，用户粘贴进来的内容只有 text/plain。
+// 直接当 HTML 发会丢换行/空格并有 XSS 风险，这里转义后用 pre-wrap 保留排版。
+function textToSafeHtml(text: string) {
+  return `<div style="white-space:pre-wrap;word-break:break-word;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;">${escapeHtml(text)}</div>`
+}
+
 async function sendWithResend(
   to: string,
   subject: string,
-  content: string,
+  html: string,
   fromEmail: string,
   config: { apiKey: string }
 ) {
@@ -31,7 +46,7 @@ async function sendWithResend(
       from: fromEmail,
       to: [to],
       subject: subject,
-      html: content,
+      html,
     }),
   })
 
@@ -107,16 +122,18 @@ export async function POST(
       )
     }
 
-    await sendWithResend(to, subject, content, email.address, { apiKey })
+    const htmlContent = textToSafeHtml(content)
+
+    await sendWithResend(to, subject, htmlContent, email.address, { apiKey })
 
     await db.insert(messages).values({
       emailId: email.id,
       fromAddress: email.address,
       toAddress: to,
       subject,
-      content: '',
+      content,
       type: "sent",
-      html: content
+      html: htmlContent
     })
 
     return NextResponse.json({ 
