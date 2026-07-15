@@ -51,7 +51,7 @@
 ![Profile](https://pic.otaku.ren/20241227/AQADVsIxG7OzcFd-.jpg "Profile")
 
 ## Add new function
-![Role Management](image/role_management2.png "Role Management - New Feature")
+![Role Management](image/role_management3.png "Role Management - New Feature")
 
 ### Delete User
 The **Emperor** (site owner) can permanently delete users directly from the Role Management panel.
