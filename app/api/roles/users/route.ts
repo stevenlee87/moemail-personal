@@ -55,7 +55,7 @@ export async function GET(request: Request) {
       .leftJoin(userRoles, eq(userRoles.userId, users.id))
       .leftJoin(roles, eq(roles.id, userRoles.roleId))
       .where(searchCondition)
-      .orderBy(roleRank, sql`LOWER(COALESCE(${users.username}, ${users.name}))`)
+      .orderBy(roleRank, sql`LENGTH(COALESCE(${users.username}, ${users.name}))`, sql`LOWER(COALESCE(${users.username}, ${users.name}))`)
       .limit(pageSize)
       .offset((page - 1) * pageSize)
 
