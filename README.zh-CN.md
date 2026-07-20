@@ -102,7 +102,7 @@
 
 ### 前置要求
 
-- Node.js 18+
+- Node.js 20/22 LTS（⚠️ 避免 Node.js 26+：会生成损坏的 `@cloudflare/next-on-pages` worker，导致运行时 auth 崩溃）
 - Pnpm
 - Wrangler CLI
 - Cloudflare 账号

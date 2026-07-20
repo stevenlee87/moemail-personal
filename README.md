@@ -102,7 +102,7 @@ The documentation site contains detailed usage guides, API documentation, deploy
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20/22 LTS (⚠️ avoid Node.js 26+: it produces a broken `@cloudflare/next-on-pages` worker that crashes auth at runtime)
 - Pnpm
 - Wrangler CLI
 - Cloudflare Account
