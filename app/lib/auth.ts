@@ -255,5 +255,10 @@ export async function register(username: string, password: string) {
     })
     .returning()
 
+  // 注册时即分配默认角色（平民），避免依赖后续登录才分配
+  const defaultRole = await getDefaultRole()
+  const role = await findOrCreateRole(db, defaultRole)
+  await assignRoleToUser(db, user.id, role.id)
+
   return user
 }

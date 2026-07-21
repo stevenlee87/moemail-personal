@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       .where(searchCondition)
     const total = Number(totalResult[0].count)
 
-    const roleRank = sql`CASE ${roles.name}
+    const roleRank = sql`CASE COALESCE(${roles.name}, ${ROLES.CIVILIAN})
       WHEN ${ROLES.EMPEROR} THEN 0
       WHEN ${ROLES.DUKE} THEN 1
       WHEN ${ROLES.KNIGHT} THEN 2
