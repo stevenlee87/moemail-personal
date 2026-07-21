@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { signIn } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { useToast } from "@/components/ui/use-toast"
@@ -57,6 +57,49 @@ export function LoginForm({ turnstile }: LoginFormProps) {
     setTurnstileToken("")
     setTurnstileResetCounter((prev) => prev + 1)
   }, [])
+
+  // 注册成功后自动登录：用新 Turnstile token（旧 token 已被注册接口消耗）
+  const pendingAutoLoginRef = useRef(false)
+
+  const completeAutoLogin = useCallback(async (token: string) => {
+    try {
+      const result = await signIn("credentials", {
+        username,
+        password,
+        turnstileToken: token,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        toast({
+          title: t("toast.loginFailed"),
+          description: result.error || t("toast.autoLoginFailed"),
+          variant: "destructive",
+        })
+        setLoading(false)
+        resetTurnstile()
+        return
+      }
+
+      window.location.href = "/"
+    } catch (error) {
+      toast({
+        title: t("toast.loginFailed"),
+        description: error instanceof Error ? error.message : t("toast.registerFailedDesc"),
+        variant: "destructive",
+      })
+      setLoading(false)
+      resetTurnstile()
+    }
+  }, [username, password, t, toast, resetTurnstile])
+
+  // 重置 Turnstile 产生新 token 后，触发自动登录
+  useEffect(() => {
+    if (pendingAutoLoginRef.current && turnstileToken) {
+      pendingAutoLoginRef.current = false
+      void completeAutoLogin(turnstileToken)
+    }
+  }, [turnstileToken, completeAutoLogin])
 
   const ensureTurnstileSolved = () => {
     if (!turnstileEnabled) return true
@@ -166,25 +209,15 @@ export function LoginForm({ turnstile }: LoginFormProps) {
       }
 
       // 注册成功后自动登录
-      const result = await signIn("credentials", {
-        username,
-        password,
-        turnstileToken,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        toast({
-          title: t("toast.loginFailed"),
-          description: result.error || t("toast.autoLoginFailed"),
-          variant: "destructive",
-        })
-        setLoading(false)
+      if (turnstileEnabled) {
+        // 注册接口已消耗 Turnstile token，需重置 widget 获取新 token 后再登录
+        pendingAutoLoginRef.current = true
         resetTurnstile()
         return
       }
 
-      window.location.href = "/"
+      // Turnstile 未启用，直接登录
+      await completeAutoLogin("")
     } catch (error) {
       toast({
         title: t("toast.registerFailed"),
