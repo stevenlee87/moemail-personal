@@ -31,6 +31,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# Cloudflare Wrangler local secrets (never commit)
+.dev.vars
+
 # vercel
 .vercel
 
